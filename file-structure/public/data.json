@@ -1,0 +1,42 @@
+[
+  {
+    "type": "file",
+    "name": "file.txt"
+  },
+  {
+    "type": "folder",
+    "name": "src",
+    "content": [
+      {
+        "type": "file",
+        "name": "index.html"
+      },
+      {
+        "type": "folder",
+        "name": "index.css",
+        "content": [
+          {
+            "type": "file",
+            "name": "index.css"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "file",
+    "name": "file.txt"
+  },
+  {
+    "type": "file",
+    "name": "file.txt"
+  },
+  {
+    "type": "file",
+    "name": "file.txt"
+  },
+  {
+    "type": "file",
+    "name": "file.txt"
+  }
+]
