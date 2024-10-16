@@ -6,6 +6,12 @@ import {
 import { useEffect, useState, useRef } from "react";
 import "./index.css";
 
+interface FolderOrFileProp {
+  name: string;
+  type: "file" | "folder";
+  content?: any;
+}
+
 const FileComponent = (props: { name: string }) => {
   return (
     <div className="inline-flex w-full items-center gap-2 bg-slate-200 p-4 py-1">
@@ -15,14 +21,7 @@ const FileComponent = (props: { name: string }) => {
   );
 };
 
-const FolderComponent = (props: {
-  name: string;
-  children?: {
-    type: string;
-    name: string;
-    content?: Array<{ type: string; name: string }>;
-  };
-}) => {
+const FolderComponent = (props: FolderProps) => {
   return (
     <div className="block w-full bg-slate-200 p-4 py-1">
       <div className="inline-flex w-full items-center gap-2">
@@ -34,10 +33,6 @@ const FolderComponent = (props: {
               <p>{props.name}</p>
             </div>
           </summary>
-
-          {/* {props.children?.content ? (
-            <FolderComponent name={props.children} />
-          ) : null} */}
         </details>
       </div>
     </div>
@@ -53,21 +48,17 @@ function App() {
       const response = await fetch("/data.json");
       const result = await response.json();
 
-      const data = result.map(
-        (item: {
-          type: string;
-          name: string;
-          content?: Array<{ type: string; name: string }>;
-        }) => {
-          if (item.type === "file") {
-            return <FileComponent name={item.name} />;
-          } else if (item.type === "folder") {
-            if (!item.content) return <FolderComponent name={item.name} />;
+      console.log(result);
 
-            return <FolderComponent name={item.name} children={item.content} />;
-          }
-        },
-      );
+      const data = result.map((item: FolderProps) => {
+        if (item.type === "file") {
+          return <FileComponent name={item.name} />;
+        } else if (item.type === "folder") {
+          if (!item.content) return <FolderComponent name={item.name} />;
+
+          return <FolderComponent name={item.name} />;
+        }
+      });
 
       setData(data);
     };
