@@ -1,7 +1,17 @@
 [
   {
     "type": "file",
-    "name": "file.txt"
+    "name": "notes.txt"
+  },
+  {
+    "type": "folder",
+    "name": "assets",
+    "content": [
+      {
+        "type": "file",
+        "name": "logo.png"
+      }
+    ]
   },
   {
     "type": "folder",
@@ -13,7 +23,7 @@
       },
       {
         "type": "folder",
-        "name": "index.css",
+        "name": "css files",
         "content": [
           {
             "type": "file",
@@ -28,15 +38,45 @@
     "name": "file.txt"
   },
   {
-    "type": "file",
-    "name": "file.txt"
+    "type": "folder",
+    "name": "other folder"
   },
   {
     "type": "file",
     "name": "file.txt"
   },
   {
+    "type": "folder",
+    "name": "src2",
+    "content": [
+      {
+        "type": "folder",
+        "name": "components",
+        "content": [
+          {
+            "type": "file",
+            "name": "Navbar.tsx"
+          },
+          {
+            "type": "folder",
+            "name": "temp"
+          },
+          {
+            "type": "folder",
+            "name": "store",
+            "content": [
+              {
+                "type": "file",
+                "name": "index.ts"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "type": "file",
-    "name": "file.txt"
+    "name": "vite.config.ts"
   }
 ]
