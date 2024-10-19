@@ -21,7 +21,7 @@ type FolderOrFileProp = File | Folder;
 
 const FileComponent = (props: { name: string }) => {
   return (
-    <div className="inline-flex w-full items-center gap-2 bg-slate-200 px-4 py-1">
+    <div className="inline-flex w-full items-center gap-2 bg-slate-200 px-4 pt-1">
       <DocumentIcon />
       <p>{props.name}</p>
     </div>
@@ -33,7 +33,7 @@ const FolderComponent = (props: FolderOrFileProp) => {
   if (props.type === "folder") folderContent = props.content;
 
   return (
-    <div className="inline-flex w-full bg-slate-200 px-4 py-1">
+    <div className="inline-flex w-full bg-slate-200 px-4 pt-1">
       <div className="inline-flex w-full items-center gap-2">
         <details className="w-full cursor-pointer">
           <summary className="list-none">
@@ -129,7 +129,7 @@ function App() {
   return (
     <div className="flex h-screen w-full select-none items-center justify-center">
       <div
-        className="flex h-2/3 w-1/2 flex-col overflow-hidden rounded-xl bg-slate-100"
+        className="flex h-2/3 w-1/2 flex-col overflow-hidden rounded-xl bg-slate-100 before:h-2 before:bg-slate-200 after:h-2 after:bg-slate-200"
         ref={dataRef}
       >
         {data}
