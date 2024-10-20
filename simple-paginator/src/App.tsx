@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   LeftArrow,
   FullLeftArrow,
@@ -9,79 +9,128 @@ import {
 } from "./components/icons";
 import "./index.css";
 
-const data = [
-  { name: "Page 1" },
-  { name: "Page 2" },
-  { name: "Page 3" },
-  { name: "Page 4" },
-  { name: "Page 5" },
-  { name: "Page 6" },
-  { name: "Page 7" },
-  { name: "Page 8" },
-  { name: "Page 9" },
-  { name: "Page 10" },
-  { name: "Page 11" },
-  { name: "Page 12" },
-  { name: "Page 13" },
-  { name: "Page 14" },
-  { name: "Page 15" },
-  { name: "Page 16" },
-  { name: "Page 17" },
-  { name: "Page 18" },
-  { name: "Page 19" },
-  { name: "Page 20" },
-];
+interface dataElement {
+  name: string;
+  description: string;
+}
 
-const PageComponent = (props: { name: string }) => {
+const PageComponent = (props: { name: string; description: string }) => {
   return (
-    <div className="flex w-full flex-col bg-slate-300 px-4 pt-1">
+    <div className="flex w-full flex-col rounded-lg bg-slate-300 p-2 px-4">
       <p className="text-2xl">{props.name}</p>
-      <div>
-        <p>Text here</p>
-        <p>Text here</p>
-      </div>
+      <p className="text-sm">{props.description}</p>
     </div>
   );
 };
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(5);
+  const [dataPerPage, setDataPerPage] = useState(2);
+  const [data, setData] = useState<dataElement[]>([]);
+  const maxPerPageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (maxPerPageRef.current) {
+      maxPerPageRef.current.innerHTML = `Max per page: ${dataPerPage}`;
+    }
+  }, [dataPerPage]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await fetch("./data.json");
+      const responseData = await response.json();
+
+      setData(responseData);
+    };
+
+    getData();
+  });
 
   return (
     <div className="flex h-screen w-full items-center justify-center">
-      <div className="flex h-2/3 w-1/2 flex-col rounded-xl">
-        <div className="flex h-full flex-col gap-4 overflow-auto bg-slate-200 p-4">
-          {data.map((element, index) => (
-            <PageComponent name={element.name} key={index} />
-          ))}
+      <div className="flex h-2/3 w-1/2 flex-col">
+        <div className="relative h-full rounded-t-xl bg-slate-200 p-4">
+          <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-slate-200" />
+
+          <div className="flex h-full flex-col gap-4 overflow-auto">
+            {data.map((element, index) => {
+              return (
+                <>
+                  {index < dataPerPage * currentPage &&
+                    index >= dataPerPage * (currentPage - 1) && (
+                      <PageComponent
+                        name={element.name}
+                        description={element.description}
+                        key={index}
+                      />
+                    )}
+                </>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="flex h-16 w-full flex-row items-center justify-between bg-slate-200 p-4">
-          <div className="flex flex-row items-center justify-center gap-2">
-            <div className="flex size-8 items-center justify-center bg-slate-100">
+        <div className="flex h-16 w-full flex-row items-center justify-between rounded-b-xl bg-slate-200 p-4">
+          <div className="flex flex-row items-center justify-center gap-1">
+            <button
+              className="flex size-8 items-center justify-center rounded-md bg-slate-100 active:bg-slate-300"
+              onClick={() => setCurrentPage(1)}
+            >
               <FullLeftArrow />
-            </div>
-            <div className="flex size-8 items-center justify-center bg-slate-100">
+            </button>
+            <button
+              className="flex size-8 items-center justify-center rounded-md bg-slate-100 active:bg-slate-300"
+              onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+            >
               <LeftArrow />
+            </button>
+
+            <div className="select-none px-2">
+              <p>Page {currentPage}</p>
             </div>
-            <div className="flex size-8 items-center justify-center bg-slate-100">
+
+            <button
+              className="flex size-8 items-center justify-center rounded-md bg-slate-100 active:bg-slate-300"
+              onClick={() =>
+                currentPage < data.length / dataPerPage &&
+                setCurrentPage(currentPage + 1)
+              }
+            >
               <RightArrow />
-            </div>
-            <div className="flex size-8 items-center justify-center bg-slate-100">
+            </button>
+            <button
+              className="flex size-8 items-center justify-center rounded-md bg-slate-100 active:bg-slate-300"
+              onClick={() =>
+                setCurrentPage(Math.ceil(data.length / dataPerPage))
+              }
+            >
               <FullRightArrow />
-            </div>
+            </button>
           </div>
 
-          <div className="flex flex-row items-center gap-2">
-            <div>Max per page: {dataPerPage}</div>
+          <div className="flex flex-row items-center gap-1">
+            <div ref={maxPerPageRef} className="select-none px-2">
+              Max per page: {dataPerPage}
+            </div>
 
-            <div className="flex size-8 items-center justify-center bg-slate-100">
+            <button
+              className="box-border flex size-8 items-center justify-center rounded-md bg-slate-100 active:bg-slate-300"
+              onClick={() => (
+                console.log(dataPerPage),
+                dataPerPage > 1 && setDataPerPage(dataPerPage - 1)
+              )}
+            >
               <MinusIcon />
-            </div>
-            <div className="flex size-8 items-center justify-center bg-slate-100">
+            </button>
+            <button
+              className="flex size-8 items-center justify-center rounded-md bg-slate-100 active:bg-slate-300"
+              onClick={() => (
+                console.log(dataPerPage),
+                dataPerPage < data.length && setDataPerPage(dataPerPage + 1)
+              )}
+            >
               <PlusIcon />
-            </div>
+            </button>
           </div>
         </div>
       </div>
